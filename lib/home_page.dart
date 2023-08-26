@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_application_1/ListView.dart';
 import 'package:todo_app/custom%20widgets/list_view.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +13,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffEEEFF5),
+      backgroundColor: const Color(0xffEEEFF5),
       appBar: AppBar(
-        backgroundColor: Color(0xffEEEFF5),
+        backgroundColor: const Color(0xffEEEFF5),
         leading: const Icon(
           Icons.menu,
           color: Color(0xFF3a3a3a),
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         actions: const [
           Padding(
-            padding: const EdgeInsets.only(right: 20),
+            padding: EdgeInsets.only(right: 20),
             child: CircleAvatar(
               radius: 20,
               backgroundColor: Colors.yellow,
@@ -64,27 +65,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Expanded(
-            child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 40, bottom: 20),
-                    child: const Text(
-                      "All ToDos",
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                ListViews(),
-                ListViews(),
-                ListViews(),
-                ListViews(),
-              ],
-            ),
-          ),
+          const Expanded(child: ListViews())
         ],
       ),
     );
