@@ -12,7 +12,7 @@ class _ListViewsState extends State<ListViews> {
   List<bool> isLineThroughList = [];
   List<bool> isCheckedList = [];
   List<String> todoItem = [];
-
+  TextEditingController update_Task = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -22,16 +22,17 @@ class _ListViewsState extends State<ListViews> {
   }
 
   // Toggle the line-through text for a specific item.
-  void toggleLineThrough(int index) {
-    setState(() {
-      isLineThroughList[index] = !isLineThroughList[index];
-    });
-  }
+  // void toggleLineThrough(int index) {
+  //   setState(() {
+  //     isLineThroughList[index] = !isLineThroughList[index];
+  //   });
+  // }
 
   // Toggle the checkbox for a specific item.
   void toggleCheckbox(int index) {
     setState(() {
       isCheckedList[index] = !isCheckedList[index];
+      isLineThroughList[index] = isCheckedList[index];
     });
   }
 
@@ -60,56 +61,102 @@ class _ListViewsState extends State<ListViews> {
         Container(
           padding: EdgeInsets.only(left: 20, right: 20),
           margin: EdgeInsets.only(bottom: 20),
-          child: ListView.builder(
-            itemCount: todoItem.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  toggleLineThrough(index);
-                },
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                tileColor: Colors.white,
-                leading: IconButton(
-                  icon: Icon(
-                    isCheckedList[index]
-                        ? Icons.check_box
-                        : Icons.check_box_outline_blank,
+          child: Expanded(
+            child: ListView.builder(
+              itemCount: todoItem.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  // onTap: () {
+                  //   toggleLineThrough(index);
+                  // },
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  color: Color.fromARGB(255, 50, 26, 205),
-                  onPressed: () {
-                    toggleCheckbox(index);
-                  },
-                ),
-                title: Text(
-                  todoItem[index],
-                  style: TextStyle(
-                    color: Color(0xFF3a3a3a),
-                    decoration: isLineThroughList[index]
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                  ),
-                ),
-                trailing: Container(
-                  height: 35,
-                  width: 35,
-                  margin: EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 190, 44, 33),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: IconButton(
-                    icon: Icon(Icons.delete),
-                    color: Colors.white,
-                    iconSize: 18,
+                  tileColor: Colors.white,
+                  leading: IconButton(
+                    icon: Icon(
+                      isCheckedList[index]
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                    ),
+                    color: Color.fromARGB(255, 50, 26, 205),
                     onPressed: () {
-                      deleteTask(index);
+                      toggleCheckbox(index);
                     },
                   ),
-                ),
-              );
-            },
+                  title: Text(
+                    todoItem[index],
+                    style: TextStyle(
+                      color: Color(0xFF3a3a3a),
+                      decoration: isLineThroughList[index]
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        height: 35,
+                        width: 35,
+                        margin:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 5),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 190, 44, 33),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.edit),
+                          color: Colors.white,
+                          iconSize: 18,
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text("Update Task"),
+                                  content: TextField(
+                                    controller: update_Task,
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            todoItem[index] = update_Task.text;
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("Update")),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                      Container(
+                        height: 35,
+                        width: 35,
+                        margin: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 190, 44, 33),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Colors.white,
+                          iconSize: 18,
+                          onPressed: () {
+                            deleteTask(index);
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
         Align(
